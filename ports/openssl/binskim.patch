@@ -1,0 +1,24 @@
+diff --git a/Configurations/10-main.conf b/Configurations/10-main.conf
+index 8ca8235..d43e220 100644
+--- a/Configurations/10-main.conf
++++ b/Configurations/10-main.conf
+@@ -1231,8 +1231,9 @@ my %targets = (
+         template         => 1,
+         CC               => "cl",
+         CPP              => '$(CC) /EP /C',
+-        CFLAGS           => "/W3 /wd4090 /nologo",
+-        LDFLAGS          => add("/debug"),
++        CFLAGS           => "/W3 /wd4090 /nologo /guard:cf /ZH:SHA_256 /Qspectre /sdl",
++        LDFLAGS          => add(picker(debug => "/debug /DYNAMICBASE /CETCOMPAT",
++                                       release => "/debug /opt:ref,icf /incremental:no /DYNAMICBASE /CETCOMPAT")),
+         coutflag         => "/Fo",
+         defines          => add("OPENSSL_SYS_WIN32", "WIN32_LEAN_AND_MEAN",
+                                 "UNICODE", "_UNICODE",
+@@ -1240,6 +1241,7 @@ my %targets = (
+                                 "_WINSOCK_DEPRECATED_NO_WARNINGS"),
+         lib_cflags       => add("/Zi /Fdossl_static.pdb"),
+         lib_defines      => add("L_ENDIAN"),
++		 lflags           => add('/guard:cf /DYNAMICBASE'),
+         dso_cflags       => "/Zi /Fddso.pdb",
+         bin_cflags       => "/Zi /Fdapp.pdb",
+         shared_ldflag    => "/dll",
